@@ -5,4 +5,6 @@
 /tutorial_data/LiverMale3600.csv
 /tutorial_data/MaleLiver-Data.zip
 
-/tutorial_output
+/tutorial_output/
+
+/Maize_proteomics_output/
