@@ -27,7 +27,7 @@ enableWGCNAThreads()
 ##################################################
 selected_genotype <- "O2"
 
-softPower <- 18
+softPower <- 22
 minModuleSize <- 5
 
 # Eigengenes clustering tree cutting threshold
@@ -37,7 +37,7 @@ MEDissThres <- 0.0000001
 ##################################################
 # Output folder
 ##################################################
-output_path <- file.path("/home/ycth8/data/projects/05_30_2021_summer_WGCNA/Maize_proteomics_output/2021_06_10_O2_auto_network_construction")
+output_path <- file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output/2021_06_10_O2_auto_network_construction")
 
 if(!dir.exists(output_path)){
   dir.create(output_path, showWarnings=FALSE, recursive=TRUE)
@@ -51,7 +51,7 @@ if(!dir.exists(output_path)){
 # Read in input file
 ##################################################
 
-folder_path = file.path("/home/ycth8/data/projects/05_30_2021_summer_WGCNA/Maize_proteomics_output")
+folder_path = file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output")
 
 datExpr = read.csv(
   file = file.path(folder_path, "datExpr.csv"),
@@ -62,6 +62,29 @@ datExpr = read.csv(
 )
 
 datExpr = datExpr[startsWith(rownames(datExpr), selected_genotype),]
+
+
+##################################################
+# Quality check
+##################################################
+
+gsg = goodSamplesGenes(datExpr, verbose = 3)
+
+cat(rep("\n", 2))
+print(gsg$allOK)
+
+# If gsg$allOK is FALSE, remove genes and samples
+if (!gsg$allOK)
+{
+  # Optionally, print the gene and sample names that were removed:
+  if (sum(!gsg$goodGenes)>0)
+    printFlush(paste("Removing genes:", paste(names(datExpr)[!gsg$goodGenes], collapse = ", ")))
+  if (sum(!gsg$goodSamples)>0)
+    printFlush(paste("Removing samples:", paste(rownames(datExpr)[!gsg$goodSamples], collapse = ", ")))
+
+  # Remove the offending genes and samples from the data:
+  datExpr = datExpr[gsg$goodSamples, gsg$goodGenes]
+}
 
 
 ##################################################
@@ -141,6 +164,45 @@ plotDendroAndColors(
   guideHang = 0.05
 )
 dev.off()
+
+
+##################################################
+# Save genes and colors
+##################################################
+genes_colors_df <- data.frame(
+  "Gene" = colnames(datExpr),
+  "Color" = mergedColors,
+  stringsAsFactors = FALSE
+)
+
+write.csv(
+  x = genes_colors_df,
+  file = file.path(output_path, "genes_colors_df.csv"),
+  na = "",
+  quote = FALSE,
+  row.names = FALSE
+)
+
+
+genes_colors_summary_df <- genes_colors_df %>%
+  group_by(Color) %>%
+  summarize(Count = n()) %>%
+  arrange(Count) %>%
+  as.data.frame(stringsAsFactors = FALSE)
+
+genes_colors_summary_df$Color <- factor(genes_colors_summary_df$Color, levels = unique(genes_colors_summary_df$Color))
+
+p <- ggplot(data=genes_colors_summary_df, aes(x = Color, y=Count)) +
+  geom_bar(mapping = aes(fill = Color), stat="identity") +
+  geom_text(aes(label=Count), hjust=1, color="white", size=3.5) +
+  coord_flip() +
+  scale_fill_manual(values = levels(genes_colors_summary_df$Color))
+
+ggsave(
+  filename = "genes_colors_summary.png",
+  plot = p,
+  path = output_path
+)
 
 
 ##################################################
