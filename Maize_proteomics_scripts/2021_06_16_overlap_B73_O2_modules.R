@@ -48,16 +48,6 @@ if(!dir.exists(output_path)){
 
 folder_path = file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output")
 
-# datTraits = read.csv(
-#   file = file.path(folder_path, "datTraits.csv"),
-#   header = TRUE,
-#   row.names = 1,
-#   check.names = FALSE,
-#   stringsAsFactors = FALSE
-# )
-#
-# datTraits = datTraits[startsWith(rownames(datTraits), selected_genotype),]
-
 selected_genotype <- "B73"
 lnames = load(
   file = file.path(
