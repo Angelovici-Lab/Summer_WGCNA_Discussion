@@ -1,3 +1,4 @@
+#!/usr/bin/Rscript --vanilla
 rm(list=ls())
 
 library(jpeg)
@@ -66,29 +67,6 @@ datExpr = read.csv(
 )
 
 datExpr = datExpr[startsWith(rownames(datExpr), selected_genotype),]
-
-
-##################################################
-# Quality check
-##################################################
-
-gsg = goodSamplesGenes(datExpr, verbose = 3)
-
-cat(rep("\n", 2))
-print(gsg$allOK)
-
-# If gsg$allOK is FALSE, remove genes and samples
-if (!gsg$allOK)
-{
-  # Optionally, print the gene and sample names that were removed:
-  if (sum(!gsg$goodGenes)>0)
-    printFlush(paste("Removing genes:", paste(names(datExpr)[!gsg$goodGenes], collapse = ", ")))
-  if (sum(!gsg$goodSamples)>0)
-    printFlush(paste("Removing samples:", paste(rownames(datExpr)[!gsg$goodSamples], collapse = ", ")))
-
-  # Remove the offending genes and samples from the data:
-  datExpr = datExpr[gsg$goodSamples, gsg$goodGenes]
-}
 
 
 ##################################################

@@ -1,3 +1,4 @@
+#!/usr/bin/Rscript --vanilla
 rm(list=ls())
 
 library(jpeg)
@@ -124,7 +125,7 @@ dev.off()
 ##################################################
 # Get top hub gene using WGCNA chooseTopHubInEachModule
 ##################################################
-top_hub <- chooseTopHubInEachModule(datExpr, moduleColors, omitColors = "")
+top_hub <- chooseTopHubInEachModule(datExpr, moduleColors, omitColors = "grey")
 
 top_hub_df <- data.frame(
   "Module" = names(top_hub),

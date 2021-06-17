@@ -1,3 +1,4 @@
+#!/usr/bin/Rscript --vanilla
 rm(list=ls())
 
 library(jpeg)

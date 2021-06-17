@@ -1,3 +1,4 @@
+#!/usr/bin/Rscript --vanilla
 rm(list=ls())
 
 library(jpeg)
@@ -119,7 +120,7 @@ nB73Mods = length(b73Modules)
 nO2Mods = length(o2Modules)
 
 # Initialize tables of p-values and of the corresponding counts
-# pTable = matrix(0, nrow = nB73Mods, ncol = nO2Mods)
+pTable = matrix(0, nrow = nB73Mods, ncol = nO2Mods)
 CountTbl = matrix(0, nrow = nB73Mods, ncol = nO2Mods)
 
 
@@ -127,15 +128,15 @@ for (i in 1:nB73Mods) {
   for (cmod in 1:nO2Mods) {
     b73Members = (b73Colors == b73Modules[i])
     o2Members = (o2Colors == o2Modules[cmod])
-    # pTable[i, cmod] = -log10(fisher.test(b73Members, o2Members, alternative = "greater")$p.value)
+    pTable[i, cmod] = -log10(fisher.test(b73Members, o2Members, alternative = "greater")$p.value)
     CountTbl[i, cmod] = sum(b73Colors == b73Modules[i] & o2Colors == o2Modules[cmod])
   }
 }
 
 
 # Truncate p values smaller than 10^{-50} to 10^{-50}
-# pTable[is.infinite(pTable)] = 1.3*max(pTable[is.finite(pTable)])
-# pTable[pTable>50 ] = 50
+pTable[is.infinite(pTable)] = 1.3*max(pTable[is.finite(pTable)])
+pTable[pTable>50 ] = 50
 
 # Marginal counts (really module sizes)
 b73ModTotals = apply(CountTbl, 1, sum)
@@ -147,7 +148,7 @@ jpeg(file = file.path(output_path, "B73_vs_O2.jpg"), height = 480*2, width = 480
 par(mfrow=c(1,1))
 par(cex = 1.0)
 par(mar=c(10, 12, 3, 1))
-labeledHeatmap(Matrix = CountTbl,
+labeledHeatmap(Matrix = pTable,
                xLabels = paste(" ", o2Modules),
                yLabels = paste(" ", b73Modules),
                colorLabels = TRUE,
