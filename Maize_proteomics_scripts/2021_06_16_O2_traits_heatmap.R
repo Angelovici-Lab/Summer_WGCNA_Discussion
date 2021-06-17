@@ -81,6 +81,10 @@ print(lnames)
 nGenes = ncol(datExpr)
 nSamples = nrow(datExpr)
 
+
+##################################################
+# Module-trait correlation matrix
+##################################################
 # Recalculate MEs with color labels
 MEs0 = moduleEigengenes(datExpr, moduleColors)$eigengenes
 MEs = orderMEs(MEs0)
