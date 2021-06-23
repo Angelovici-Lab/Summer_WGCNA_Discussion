@@ -32,14 +32,6 @@ if(!dir.exists(output_path)){
 ##################################################
 # Read in input files
 ##################################################
-# b73_dat = read.csv(
-#   file = file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output/2021_06_22_B73_average_expression_plot/averageExpr.csv"),
-#   header = TRUE,
-#   row.names = 1,
-#   check.names = FALSE,
-#   stringsAsFactors = FALSE
-# )
-
 b73_dat = read.csv(
   file = file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output/2021_06_10_B73_step_by_step_network_construction/mergedAverageExpr.csv"),
   header = TRUE,
@@ -47,14 +39,6 @@ b73_dat = read.csv(
   check.names = FALSE,
   stringsAsFactors = FALSE
 )
-
-# o2_dat = read.csv(
-#   file = file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output/2021_06_22_O2_average_expression_plot/averageExpr.csv"),
-#   header = TRUE,
-#   row.names = 1,
-#   check.names = FALSE,
-#   stringsAsFactors = FALSE
-# )
 
 o2_dat = read.csv(
   file = file.path("/home/ycth8/data/projects/2021_05_30_summer_WGCNA/Maize_proteomics_output/2021_06_10_O2_step_by_step_network_construction/mergedAverageExpr.csv"),
