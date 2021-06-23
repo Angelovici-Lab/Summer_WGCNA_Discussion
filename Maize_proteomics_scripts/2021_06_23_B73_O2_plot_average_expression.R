@@ -75,13 +75,23 @@ p <- ggplot(data = dat, mapping = aes(x = Time, y = Measurement.B73)) +
   ggplot2::geom_line(mapping = ggplot2::aes(x = Time, y = Measurement.O2, group = Module.O2, color = Module.O2)) +
   facet_grid(Sample.B73 + Module.B73 ~ Sample.O2 + Module.O2, scales = "free") +
   labs(x = "Time Point", y = "Average Expression Value", color="Color") +
-  scale_color_manual(values=unique(c(dat$Module.B73, dat$Module.O2)))
+  scale_color_manual(values=unique(c(dat$Module.B73, dat$Module.O2))) +
+  ggplot2::theme(
+    plot.title = ggplot2::element_text(size = 40, hjust = 0.5, face = "bold"),
+    axis.title = ggplot2::element_text(size = 28),
+    axis.text.y = ggplot2::element_text(size = 24),
+    axis.text.x = ggplot2::element_text(size = 24),
+    strip.text.y = ggplot2::element_text(size = 24),
+    strip.text.x = ggplot2::element_text(size = 24),
+    legend.title = ggplot2::element_text(size = 24),
+    legend.text = ggplot2::element_text(size = 24)
+  )
 
 
 ggsave(
   filename = "average_expression.png",
   plot = p,
   path = output_path,
-  width = 20,
-  height = 20
+  width = 30,
+  height = 30
 )

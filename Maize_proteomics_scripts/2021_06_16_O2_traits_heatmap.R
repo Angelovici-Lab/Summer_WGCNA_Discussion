@@ -170,6 +170,7 @@ IMConn = softConnectivity(datExpr)
 
 IMConn_df <- data.frame(
   "Gene" = names(datExpr),
+  "Color" = moduleColors,
   "SoftConnectivity" = IMConn,
   stringsAsFactors = FALSE
 )
