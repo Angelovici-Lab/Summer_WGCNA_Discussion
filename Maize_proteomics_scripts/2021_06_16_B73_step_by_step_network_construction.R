@@ -329,6 +329,46 @@ ggsave(
 
 
 ##################################################
+# Organize merged average expression table and plot average expression
+##################################################
+MEList2 = moduleEigengenes(datExpr, colors = mergedColors)
+
+# Create average expression table
+averageExpr <- MEList2$averageExpr %>%
+  rownames_to_column(var = "Sample") %>%
+  pivot_longer(!Sample, names_to = "Module", values_to = "Measurement") %>%
+  separate(Sample, c("Sample", "Time")) %>%
+  as.data.frame(stringsAsFactors = FALSE)
+
+averageExpr$Sample <- factor(averageExpr$Sample, levels = unique(averageExpr$Sample))
+
+averageExpr$Module <- sub("^AE", "", averageExpr$Module)
+averageExpr$Module <- factor(averageExpr$Module, levels = unique(averageExpr$Module))
+
+write.csv(
+  x = averageExpr,
+  file = file.path(output_path, "mergedAverageExpr.csv"),
+  na = "",
+  quote = FALSE
+)
+
+# Plot average expression plot
+p <- ggplot(data = averageExpr, mapping = aes(x = Time, y = Measurement, group=1)) +
+  geom_line() +
+  facet_grid(Module ~ Sample, scales = "free") +
+  labs(x = "Time Point", y = "Average Expression Value")
+
+
+ggsave(
+  filename = "merged_average_expression.png",
+  plot = p,
+  path = output_path,
+  width = ifelse(length(unique(averageExpr$Sample))==3, 21, 14),
+  height = 35
+)
+
+
+##################################################
 # Save genes and colors
 ##################################################
 genes_colors_df <- data.frame(
