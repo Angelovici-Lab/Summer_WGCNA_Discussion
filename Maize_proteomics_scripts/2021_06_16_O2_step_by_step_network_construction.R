@@ -356,15 +356,25 @@ write.csv(
 p <- ggplot(data = averageExpr, mapping = aes(x = Time, y = Measurement, group=1)) +
   geom_line() +
   facet_grid(Module ~ Sample, scales = "free") +
-  labs(x = "Time Point", y = "Average Expression Value")
+  labs(x = "Time Point", y = "Average Expression Value") +
+  ggplot2::theme(
+    plot.title = ggplot2::element_text(size = 40, hjust = 0.5, face = "bold"),
+    axis.title = ggplot2::element_text(size = 28),
+    axis.text.y = ggplot2::element_text(size = 24),
+    axis.text.x = ggplot2::element_text(size = 24),
+    strip.text.y = ggplot2::element_text(size = 24),
+    strip.text.x = ggplot2::element_text(size = 24),
+    legend.title = ggplot2::element_text(size = 24),
+    legend.text = ggplot2::element_text(size = 24)
+  )
 
 
 ggsave(
   filename = "merged_average_expression.png",
   plot = p,
   path = output_path,
-  width = ifelse(length(unique(averageExpr$Sample))==3, 21, 14),
-  height = 35
+  width = 30,
+  height = 20
 )
 
 
